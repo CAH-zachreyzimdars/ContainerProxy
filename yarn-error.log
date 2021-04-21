@@ -1,0 +1,35 @@
+Arguments: 
+  /usr/local/Cellar/node/15.13.0/bin/node /usr/local/Cellar/yarn/1.22.10/libexec/bin/yarn.js add express http-proxy-middleware morgan
+
+PATH: 
+  /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin
+
+Yarn version: 
+  1.22.10
+
+Node version: 
+  15.13.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: self signed certificate in certificate chain
+      at TLSSocket.onConnectSecure (node:_tls_wrap:1531:34)
+      at TLSSocket.emit (node:events:369:20)
+      at TLSSocket._finishInit (node:_tls_wrap:945:8)
+      at TLSWrap.ssl.onhandshakedone (node:_tls_wrap:719:12)
+
+npm manifest: 
+  {
+    "name": "proxyServer",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT"
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
