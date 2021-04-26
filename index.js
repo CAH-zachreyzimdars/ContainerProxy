@@ -9,15 +9,25 @@ const app = express();
 // Configuration
 const PORT = 3000;
 const HOST = "localhost";
-const API_SERVICE_URL = "https://jsonplaceholder.typicode.com";
+const API_SERVICE_URL = "https://jsonplaceholder.typicode.com/todos";
 const CONTAINER_URL = "http://localhost:9000/CAH-root-config.js";
-const TODO_URL = "http://localhost:3001/index.js";
+const TODO_URL = "http://localhost:8080/CAH-todospa.js";
 const SINGLE_SPA_URL = "http://cdn.jsdelivr.net/npm/single-spa@5.9.0/lib/system/single-spa.min.js";
 const REACT_URL = "http://cdn.jsdelivr.net/npm/react@17.0.1/umd/react.production.min.js";
 const REACT_DOM_URL = "http://cdn.jsdelivr.net/npm/react-dom@17.0.1/umd/react-dom.production.min.js";
 const TODO_JS_URL = "../Todo-app/todo/src/index.js";
 
-
+const jsonPlaceholderOptions = {
+  target: 'https://jsonplaceholder.typicode.com/todos',
+  changeOrigin: true,
+  secure: false,
+  // pathRewrite: {
+  //   '^/json-placeholder' : API_SERVICE_URL
+  // },
+  router: {
+    '**/json-placeholder': API_SERVICE_URL
+  }
+}
 
 // proxy middleware options
 const containerOptions = {
@@ -28,6 +38,7 @@ const containerOptions = {
     //   '^localhost:3000/contianer': CONTAINER_URL, // rewrite path
     // },
     secure: false,
+    followRedirects: true,
     router: {
       // when request.headers.host == 'dev.localhost:3000',
       // override target 'http://www.example.org' to 'http://localhost:8000'
@@ -36,7 +47,7 @@ const containerOptions = {
   };
 
   const todoOptions = {
-    target: 'http://localhost:3001', // target host
+    target: 'http://localhost:8080/CAH-todospa.js', // target host
     changeOrigin: true, // needed for virtual hosted sites
     // ws: true, // proxy websockets
     // pathRewrite: {
@@ -107,6 +118,7 @@ const containerOptions = {
   const singleSpaProy = createProxyMiddleware(singleSpaOptions);
   const reactProxy = createProxyMiddleware(reactOptions);
   const reactDomProxy = createProxyMiddleware(reactDomOptions);
+  const jsonPlaceholderProxy = createProxyMiddleware(jsonPlaceholderOptions);
 
 
   app.use(cors(corsOptions));
@@ -115,7 +127,8 @@ const containerOptions = {
   app.use('/single-spa', singleSpaProy);
   app.use('/react', reactProxy);
   app.use('/react-dom', reactDomProxy);
-  app.use(express.static(TODO_JS_URL + '/'));
+  app.use('/json-placeholder', jsonPlaceholderProxy);
+  // app.use(express.static(TODO_JS_URL + '/'));
 
 // Logging
 // app.use(morgan('dev'));
